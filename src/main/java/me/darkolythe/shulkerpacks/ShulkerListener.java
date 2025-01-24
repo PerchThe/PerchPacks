@@ -1,5 +1,6 @@
 package me.darkolythe.shulkerpacks;
 
+import com.destroystokyo.paper.MaterialTags;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -73,6 +74,14 @@ public class ShulkerListener implements Listener {
     	}
     	
         Player player = (Player) event.getWhoClicked();
+
+        if(event.getCurrentItem() != null && MaterialTags.SHULKER_BOXES.isTagged(event.getCurrentItem())) {
+            if(event.getClickedInventory().getType() == InventoryType.PLAYER) return;
+            if(!GriefPreventionListener.canUseInClaim(player)) {
+                event.setCancelled(true);
+                return;
+            }
+        }
 
         if (ShulkerPacks.openshulkers.containsKey(player)) {
             if (ShulkerPacks.openshulkers.get(player).getType() == Material.AIR) {
