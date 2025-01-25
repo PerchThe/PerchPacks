@@ -25,6 +25,7 @@ import java.util.List;
 public class ShulkerListener implements Listener {
 
     public ShulkerPacks main;
+    GriefPreventionListener gpListener = new GriefPreventionListener();
     public ShulkerListener(ShulkerPacks plugin) {
         this.main = plugin; //set it equal to an instance of main
     }
@@ -75,11 +76,13 @@ public class ShulkerListener implements Listener {
     	
         Player player = (Player) event.getWhoClicked();
 
-        if(event.getCurrentItem() != null && MaterialTags.SHULKER_BOXES.isTagged(event.getCurrentItem())) {
-            if(event.getClickedInventory().getType() == InventoryType.PLAYER) return;
-            if(!GriefPreventionListener.canUseInClaim(player)) {
-                event.setCancelled(true);
-                return;
+        if(event.getClickedInventory() != null && event.getClickedInventory().getType() == InventoryType.CHEST) {
+            if(event.getCurrentItem() != null && MaterialTags.SHULKER_BOXES.isTagged(event.getCurrentItem().getType())) {
+                if(!gpListener.isInClaim(player)) return;
+                if(!gpListener.canUseInClaim(player)){
+                    event.setCancelled(true);
+                    return;
+                }
             }
         }
 
